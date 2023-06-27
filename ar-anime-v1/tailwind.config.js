@@ -8,7 +8,9 @@ export default {
     extend: {
       colors: {
         'semiDarkBlue' : '#161D2F',
-        'grBlue' : '#5A698F'
+        'grBlue' : '#5A698F',
+        'anRed' : '#FC4747',
+        'darkBlue':'#10141E'
       }
     },
   },
