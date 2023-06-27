@@ -11,16 +11,23 @@
  // cardInfo 
  // bookMarkIcon
 
+import Search from "./components/Search/Search"
 import Sidebar from "./components/Sidebar/Sidebar"
+import Main from "./components/Main"
+import TrendingLists from "./components/Trending/TrendingLists"
 
 function App() {
 
   return (
     <div className="md:m-6 lg:m-8">
       <Sidebar/>
-      <h1 className='text-blue-500'>hello world</h1>
+      <Main>
+        <Search/>
+        <TrendingLists/>
+      </Main>
     </div>
   )
 }
+
 
 export default App
