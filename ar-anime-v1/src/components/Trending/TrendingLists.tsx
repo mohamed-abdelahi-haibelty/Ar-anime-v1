@@ -1,31 +1,22 @@
-// import trendingImg from '../../assets/b.webp'
-// import atackImg from '../../assets/100633.jpg'
-// import cuteImg from '../../assets/cute.jpg'
-// import gintamaImg from '../../assets/gintama.webp'
-// import stinsImg from '../../assets/stins.webp'
+import { animeType } from '../../../Types'
+import Bookmarked from '../Bookmarked/Bookmarked'
 import TrendingCard from './TrendingCard'
 
-// const imgs = [trendingImg, atackImg, cuteImg, gintamaImg, stinsImg, cuteImg, gintamaImg, stinsImg, cuteImg, gintamaImg, stinsImg, cuteImg, gintamaImg, stinsImg, cuteImg, gintamaImg, stinsImg]
 
 type Props = {
-    topAnime : [] | never[]
+    topAnime : animeType[],
+    handleSelectedAnime : (anime : animeType) => void,
 }
 
-const TrendingLists = ({topAnime}: Props) => {
+const TrendingLists = ({topAnime, handleSelectedAnime}: Props) => {
     // to do later pass trending card data as props.
   return (
     <ul  className='mt-5 mb-3 flex items-center gap-4 overflow-x-scroll'>
-        {topAnime.map(anime => {
-            const {mal_id, images, title_english, year, score} = anime
-            const image = images?.webp?.large_image_url
-            return <TrendingCard 
-            key={mal_id} 
-            image={image} 
-            title={title_english} 
-            year={year}
-            rate={Number(score)}
-            />
-        })}
+        {
+          topAnime.map(anime => <TrendingCard anime ={anime} key={anime.mal_id} >
+            <Bookmarked anime={anime} handleSelectedAnime={handleSelectedAnime}/>
+          </TrendingCard>
+        )}
     </ul>
   )
 }
