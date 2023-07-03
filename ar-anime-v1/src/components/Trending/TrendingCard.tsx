@@ -1,14 +1,15 @@
 import {AiFillStar} from 'react-icons/ai'
 import {PiTelevisionBold} from 'react-icons/pi'
+import { animeType } from '../../../Types'
 
 type Props = {
-   image : string,
-   title : string,
-   rate : number,
-   year : string
+   anime : animeType,
+   children : React.ReactNode
 }
 
-const TrendingCard = ({image, title, rate, year}: Props) => {
+const TrendingCard = ({anime, children}: Props) => {
+  const {images, title, score : rate, year} = anime
+  const image = images?.webp?.large_image_url
   return (
     <li className='min-w-[130px] lg:min-w-[180px] h-[170px] relative mb-3'>
         <img loading='lazy' className='w-full h-full rounded-lg object-fill opacity-50' src={image} alt="anime img" />
@@ -20,6 +21,7 @@ const TrendingCard = ({image, title, rate, year}: Props) => {
             </div>
             <h3 className='text-white text-[13px] font-medium mt-[5px]'>{title}</h3>
         </div>
+        {children}
     </li>
   )
 }
