@@ -12,7 +12,6 @@ import Error from "./components/Error/Error"
 import { useNetwork } from "./Utils/useNetwork"
 import { animeType } from "../Types"
 import AnimePage from "./components/AnimePage/AnimePage"
-import { animeInit } from "./Data/AnimeInit"
 
 const URL = 'https://api.jikan.moe/v4'
 
