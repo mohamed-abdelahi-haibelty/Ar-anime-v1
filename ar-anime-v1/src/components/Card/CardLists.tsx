@@ -12,14 +12,16 @@ import Card from './Card'
 type Props = {
     recommendedAnime : animeType[],
     handleSelectedAnime : (anime : animeType) => void,
+    onAnimeClick : (value : boolean, anime : animeType) => void
 }
 
-const CardLists = ({recommendedAnime, handleSelectedAnime}: Props) => {
+const CardLists = ({recommendedAnime, handleSelectedAnime, onAnimeClick}: Props) => {
     // to do later pass trending card data as props.
   return (
     <ul  className='mt-5 mb-3 flex items-center gap-4 md:gap-[30px] lg:gap-10 flex-wrap'>
         {recommendedAnime?.map(anime => {
            return <Card
+           onAnimeClick={onAnimeClick}
            anime ={anime}
            key={anime.mal_id} 
            >

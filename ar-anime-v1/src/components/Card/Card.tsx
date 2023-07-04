@@ -4,16 +4,17 @@ import {animeType} from '../../../Types'
 
 type Props = {
   anime : animeType,
-  children : React.ReactNode
+  children : React.ReactNode,
+  onAnimeClick : (value : boolean, anime : animeType) => void
 }
 //className="absolute bottom-[-50px] left-[6px] z-10"
 
-const Card = ({anime, children}: Props) => {
+const Card = ({anime, children, onAnimeClick}: Props) => {
   const {images, title, score : rate, year} = anime
   const image = images?.webp?.large_image_url
   return (
     <li className='w-[calc(50%-16px)] md:w-[calc(33.333%-30px)] lg:w-[130px] h-[170px] relative mb-14 md:mb-9'>
-        <img loading='lazy' className='w-full h-full rounded-lg object-fill mb-2' src={image} alt="anime img" />
+        <img onClick={() => onAnimeClick(true, anime)} loading='lazy' className='w-full h-full rounded-lg object-fill mb-2 cursor-pointer' src={image} alt="anime img" />
         <div className="mb-2 flex flex-col items-start">
             <div className='text-white/95 text-[10px] lg:text-xs font-light flex items-center gap-2'>
               <span>{year}</span>

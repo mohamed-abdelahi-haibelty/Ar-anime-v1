@@ -11,13 +11,15 @@ import SkeltonTrending from "./components/Skeleton/SkeletonTrending"
 import Error from "./components/Error/Error"
 import { useNetwork } from "./Utils/useNetwork"
 import { animeType } from "../Types"
+import AnimePage from "./components/AnimePage/AnimePage"
+import { animeInit } from "./Data/AnimeInit"
 
 const URL = 'https://api.jikan.moe/v4'
 
 function App() {
 
   const [topAnime, setTopAnime] = useState<animeType[]>([])
-  const [recommendedAnime, setRecommendedAnime] = useState<animeType[] >([])
+  const [recommendedAnime, setRecommendedAnime] = useState<animeType[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [querry, setQuerry] = useState('')
@@ -25,6 +27,8 @@ function App() {
   const [filter, setFilter] = useState('')
   const [route, setRoute] = useState('home')
   const [filteredList, setFilteredList] = useState(favAnime)
+  const [animeProfile, setAnimeProfile] = useState(false)
+  const [animeDetails, setAnimeDetails] = useState<animeType>(animeInit)
   const isOnline = useNetwork()
   const cachedAnime = useRef<animeType[]>([])
 
@@ -39,7 +43,10 @@ function App() {
   }
 
   function handleRoute(route : string){
+    querry && setQuerry('')
+    filter && setFilter('')
     setRoute(route)
+    setAnimeProfile(false)
   }
 
   function handleSelectedAnime(anime : animeType){
@@ -64,10 +71,16 @@ function App() {
       setFaveAnime((prevAnime) => prevAnime.filter((a) =>  a.mal_id !== anime.mal_id))
   }
 
+  function handleAnimePage(value : boolean, anime : animeType){
+      setAnimeDetails(anime)
+      setAnimeProfile(value)
+  }
+
   // change page title
   useEffect(() => {
-    document.title = route[0].toUpperCase() + route.slice(1)
-  }, [route])
+    const title = animeProfile ? animeDetails.title : route
+    document.title = title[0].toUpperCase() + title.slice(1)
+  }, [route, animeProfile, animeDetails])
 
   // search for an anime in the bookmark
   useEffect(() => {
@@ -154,35 +167,41 @@ function App() {
     <div className="md:m-6 lg:m-8">
       <Sidebar onRoute={handleRoute}/>
       <Main>
-       {route === 'home' &&
+       {
+        animeProfile ? 
+          <AnimePage details={animeDetails}/>
+        :
         <>
-          <Search placeholder="Search for Anime" querry={querry} handleSearch={handleSearch}/>
-          {error && <Error error={error}/>}
-          {isLoading && !error && querry.length < 3 && <SkeltonTrending/>}
-          {isLoading && !error && <SkeltonRecommended/>}
+          {route === 'home' &&
+            <>
+              <Search placeholder="Search for Anime" querry={querry} handleSearch={handleSearch}/>
+              {error && <Error error={error}/>}
+              {isLoading && !error && querry.length < 3 && <SkeltonTrending/>}
+              {isLoading && !error && <SkeltonRecommended/>}
 
-          {!isLoading && !error && querry.length < 3 &&
-              <Trending>
-                <TrendingLists handleSelectedAnime={handleSelectedAnime} topAnime={topAnime}/>
-              </Trending>
+              {!isLoading && !error && querry.length < 3 &&
+                  <Trending>
+                    <TrendingLists onAnimeClick={handleAnimePage} handleSelectedAnime={handleSelectedAnime} topAnime={topAnime}/>
+                  </Trending>
+              }
+              {!isLoading && !error && 
+                  <Lists querry={querry}>
+                    <CardLists onAnimeClick={handleAnimePage} handleSelectedAnime={handleSelectedAnime} recommendedAnime={recommendedAnime}/>
+                  </Lists> 
+              }
+            </>
           }
-          {!isLoading && !error && 
-              <Lists querry={querry}>
-                <CardLists handleSelectedAnime={handleSelectedAnime} recommendedAnime={recommendedAnime}/>
-              </Lists> 
+
+          {route === 'bookmark' && 
+              <>
+                <Search handleSearch={handleFilter} querry={filter} placeholder="Bookmarked Anime"/>
+                <Lists querry={querry} text="Bookmarked Anime">
+                    <CardLists onAnimeClick={handleAnimePage} handleSelectedAnime={handleSelectedAnime} recommendedAnime={filteredList}/>
+                </Lists> 
+              </>
           }
         </>
        }
-
-       {route === 'bookmark' && 
-          <>
-            <Search handleSearch={handleFilter} querry={filter} placeholder="Bookmarked Anime"/>
-            <Lists querry={querry} text="Bookmarked Anime">
-                <CardLists handleSelectedAnime={handleSelectedAnime} recommendedAnime={filteredList}/>
-            </Lists> 
-          </>
-       }
-
       </Main>
     </div>
   )
