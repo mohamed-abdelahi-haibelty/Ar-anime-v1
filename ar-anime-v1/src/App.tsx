@@ -28,7 +28,7 @@ function App() {
   const [route, setRoute] = useState('home')
   const [filteredList, setFilteredList] = useState(favAnime)
   const [animeProfile, setAnimeProfile] = useState(false)
-  const [animeDetails, setAnimeDetails] = useState<animeType>(animeInit)
+  const [animeDetails, setAnimeDetails] = useState<animeType>(recommendedAnime[0])
   const isOnline = useNetwork()
   const cachedAnime = useRef<animeType[]>([])
 
